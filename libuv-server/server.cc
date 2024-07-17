@@ -3,6 +3,7 @@
 #include <string.h>
 #include <uv.h>
 #include "reliable.h"
+#include "uvcommon/serialize.h"
 
 #define MAX_PACKET_SIZE 1024
 #define SERVER_PORT 12345
@@ -29,11 +30,29 @@ static void server_transmit_packet(void* context, uint64_t id, uint16_t sequence
   printf("Server sent packet: seq=%d, size=%d\n", sequence, packet_bytes);
 }
 
-static int server_process_packet(void* context, uint64_t id, uint16_t sequence, uint8_t* packet_data, int packet_bytes) 
+//static int server_process_packet(void* context, uint64_t id, uint16_t sequence, uint8_t* packet_data, int packet_bytes) 
+//{
+//  printf("Server received: seq=%d, message=%s\n", sequence, packet_data);
+//
+//  return 1;
+//}
+
+static int server_process_packet(void* context, uint64_t id, uint16_t sequence, uint8_t* packet_data, int packet_bytes)
 {
-  printf("Server received: seq=%d, message=%s\n", sequence, packet_data);
+  if (packet_bytes == sizeof(struct packet::message)) 
+  {
+    struct packet::message pkt;
+    packet::deserialize(packet_data, &pkt);
+    printf("Server received: seq=%d, name=%s, id=%d, state_01=%d, buttonState=%d, thumb_x=%.2f, thumb_y=%.2f\n",
+      sequence, pkt.name, pkt.id, pkt.state_01, pkt.buttonState, pkt.thumb_x, pkt.thumb_y);
+  }
+  else 
+  {
+    printf("Server received: seq=%d, size=%d (unknown format)\n", sequence, packet_bytes);
+  }
   return 1;
 }
+
 
 static void on_read(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags) {
   if (nread > 0) 

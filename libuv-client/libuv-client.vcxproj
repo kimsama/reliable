@@ -129,7 +129,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\reliable.c" />
+    <ClCompile Include="..\uvcommon\serialize.cc" />
     <ClCompile Include="client.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\uvcommon\serialize.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

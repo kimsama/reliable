@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\uvcommon">
+      <UniqueIdentifier>{d48060da-9312-41bc-81d6-d11e5b2dfee7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\uvcommon">
+      <UniqueIdentifier>{e32e84c8-0724-493d-b952-5e240f368195}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="server.cc">
@@ -21,5 +27,13 @@
     <ClCompile Include="..\reliable.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\uvcommon\serialize.cc">
+      <Filter>Source Files\uvcommon</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\uvcommon\serialize.h">
+      <Filter>Header Files\uvcommon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
