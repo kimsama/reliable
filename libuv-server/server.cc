@@ -1,6 +1,7 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
 #include <uv.h>
 #include "reliable.h"
 #include "uvcommon/serialize.h"
@@ -15,6 +16,7 @@ typedef struct
   reliable_endpoint_t* endpoint;
   uv_loop_t* loop;
   int running;
+
 } ServerContext;
 
 static void alloc_buffer(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) 
@@ -29,13 +31,6 @@ static void server_transmit_packet(void* context, uint64_t id, uint16_t sequence
   uv_udp_try_send(&ctx->udp_handle, &buf, 1, (const struct sockaddr*)&ctx->client_addr);
   printf("Server sent packet: seq=%d, size=%d\n", sequence, packet_bytes);
 }
-
-//static int server_process_packet(void* context, uint64_t id, uint16_t sequence, uint8_t* packet_data, int packet_bytes) 
-//{
-//  printf("Server received: seq=%d, message=%s\n", sequence, packet_data);
-//
-//  return 1;
-//}
 
 static int server_process_packet(void* context, uint64_t id, uint16_t sequence, uint8_t* packet_data, int packet_bytes)
 {
@@ -53,7 +48,6 @@ static int server_process_packet(void* context, uint64_t id, uint16_t sequence, 
   return 1;
 }
 
-
 static void on_read(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const struct sockaddr* addr, unsigned flags) {
   if (nread > 0) 
   {
@@ -68,6 +62,8 @@ static void on_read(uv_udp_t* handle, ssize_t nread, const uv_buf_t* buf, const 
 
 int main(int argc, char* argv[])
 {
+  std::cout << "Server starts to listen..." << std::endl;
+
   ServerContext ctx;
   ctx.loop = uv_default_loop();
   ctx.running = 1;
@@ -101,7 +97,7 @@ int main(int argc, char* argv[])
     }
     reliable_endpoint_clear_acks(ctx.endpoint);
 
-    // 약 60 FPS로 실행
+    // run as 60FPS
     uv_sleep(16);
   }
 
